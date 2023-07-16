@@ -13,8 +13,11 @@
             get
             {
                 decimal totalPrice = 0;
-                foreach (var item in this.Items)
-                    totalPrice += item.Price * item.Count;
+                if(this.Items != null && this.Items.Any())
+                {
+                    foreach (var item in this.Items)
+                        totalPrice += item.Price * item.Count;
+                }
                 return totalPrice;
             }
         }
