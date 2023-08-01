@@ -8,7 +8,7 @@ namespace Ordering.Infrastructure.Repositories
 {
     public class BaseRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
-        private readonly OrderDbContext _context;
+        protected readonly OrderDbContext _context;
 
         public BaseRepository(OrderDbContext context)
         {
