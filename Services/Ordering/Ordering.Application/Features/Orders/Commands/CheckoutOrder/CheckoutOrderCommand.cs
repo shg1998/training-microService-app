@@ -14,6 +14,5 @@ namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
         public string BankName { get; set; }
         public string RefCode { get; set; }
         public int PaymentMethod { get; set; }
-
     }
 }

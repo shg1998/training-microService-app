@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Application.Contracts.Infrastructure;
 using Ordering.Application.Contracts.Persistence;
-using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
+using Ordering.Application.Exceptions;
 using Ordering.Domain.Entities;
 
 namespace Ordering.Application.Features.Orders.Commands.UpdateOrder
@@ -26,9 +26,10 @@ namespace Ordering.Application.Features.Orders.Commands.UpdateOrder
         public async Task<Unit> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
             var order4Update = await this._repository.GetByIdAsync(request.Id);
-            if(order4Update == null)
+            if (order4Update == null)
             {
                 this._logger.LogError("order wa not exists!");
+                throw new NotFoundException(nameof(Order), request.Id);
             }
             this._mapper.Map(request, order4Update, typeof(UpdateOrderCommand), typeof(Order));
             await this._repository.UpdateAsync(order4Update);
