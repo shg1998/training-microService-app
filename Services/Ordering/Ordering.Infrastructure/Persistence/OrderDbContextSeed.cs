@@ -28,6 +28,9 @@ namespace Ordering.Infrastructure.Persistence
                     EmailAddress="djklhdkhd@khfdkhd.hdkhd",
                     City= "Tehran",
                     Country= "iran",
+                    BankName="kkdhkhdkhd",
+                    PaymentMethod=1,
+                    RefCode= "dkhdkhdkhd",
                     TotalPrice = 10000
                 }
             };
