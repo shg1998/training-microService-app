@@ -62,11 +62,7 @@ namespace Basket.Api.Controllers
         {
             // get existing basket with total price
             var basket = await _repository.GetUserBasket(basketCheckout.UserName);
-            if (basket == null)
-            {
-                return BadRequest();
-            }
-
+            if (basket == null) return BadRequest();
 
             // create BasketCheckoutEvent -- set total price on basketCheckout event message
             var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
