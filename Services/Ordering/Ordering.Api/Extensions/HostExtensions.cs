@@ -9,32 +9,29 @@ namespace Ordering.Api.Extensions
             Action<TContext, IServiceProvider> seeder,
             int? retry = 0) where TContext : DbContext
         {
-            int retryForAvailability = retry.Value;
+            var retryForAvailability = retry.Value;
 
-            using (var scope = host.Services.CreateScope())
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var logger = services.GetRequiredService<ILogger<TContext>>();
+            var context = services.GetService<TContext>();
+            try
             {
-                var services = scope.ServiceProvider;
-                var logger = services.GetRequiredService<ILogger<TContext>>();
-                var context = services.GetService<TContext>();
+                logger.LogInformation("migrating started for sql server");
+                InvokeSeeder(seeder, context, services);
+                logger.LogInformation("migrating has been done for sql server");
+            }
+            catch (SqlException ex)
+            {
+                logger.LogError(ex, "an error occurred while migrating database");
 
-                try
+                if (retryForAvailability < 20)
                 {
-                    logger.LogInformation("migrating started for sql server");
-                    InvokeSeeder(seeder, context, services);
-                    logger.LogInformation("migrating has been done for sql server");
+                    retryForAvailability++;
+                    Thread.Sleep(2000);
+                    MigrateDatabase<TContext>(host, seeder, retryForAvailability);
                 }
-                catch (SqlException ex)
-                {
-                    logger.LogError(ex, "an error occurred while migrating database");
-
-                    if (retryForAvailability < 20)
-                    {
-                        retryForAvailability++;
-                        Thread.Sleep(2000);
-                        MigrateDatabase<TContext>(host, seeder, retryForAvailability);
-                    }
-                    throw;
-                }
+                throw;
             }
 
             return host;
