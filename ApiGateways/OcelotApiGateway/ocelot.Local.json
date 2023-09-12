@@ -18,7 +18,10 @@
         "Period": "5s",
         "PeriodTimespan": 1,
         "Limit": 1
-      }
+      },
+      "FileCacheOptions": {
+        "TtlSeconds":  40
+      } 
     },
     {
       "DownstreamPathTemplate": "/api/v1/Catalog/{id}",
