@@ -41,8 +41,8 @@ namespace Shopping.Aggregator.Controllers
             var shoppingModel = new ShoppingModel
             {
                 UserName = username,
-                Basket = basket,
-                Orders = orders
+                Basket = basket!,
+                Orders = orders!
             };
 
             return Ok(shoppingModel);
